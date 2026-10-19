@@ -46,6 +46,9 @@ export const register: Register = on => {
   })
 
   on('ui.render', { component: 'SessionMode' }, async ($, e, next) => {
+    // The desktop app already shows the usage beside the model picker.
+    if (e.surface !== 'terminal') return next(e)
+
     const current = await read($, limits)
     const shown = WINDOWS.flatMap(w => {
       const limit = current.find(l => l.kind === w.kind)

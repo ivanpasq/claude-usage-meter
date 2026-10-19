@@ -8,7 +8,7 @@ Una mod per Claude Code che mostra, nel piè di pagina del prompt, quanto hai us
 
 La barra è verde fino al 70%, gialla fino al 90%, rossa oltre. Il tempo al reset si aggiorna ogni minuto.
 
-- Funziona nel terminale e nell'app desktop.
+- Si vede solo nel terminale: l'app desktop mostra già lo usage accanto al selettore del modello.
 - Si aggiorna da sola quando una delle due percentuali sale di almeno un punto.
 - I dati arrivano con le risposte del modello: la riga compare dopo il primo messaggio della sessione.
 - Senza un abbonamento Claude (per esempio con una API key) quei dati non ci sono e la riga non appare.

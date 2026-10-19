@@ -1,6 +1,6 @@
 {
   "name": "usage-meter",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Mostra nel piè di pagina del prompt lo usage della finestra di 5 ore e di quella settimanale",
   "author": { "name": "ivanpasq", "url": "https://github.com/ivanpasq" },
   "repository": "https://github.com/ivanpasq/claude-usage-meter",

@@ -31,12 +31,12 @@ const measure = async ($: any, on: any) => {
   })
 }
 
-test('disegna le due finestre nel piè di pagina, su terminale e desktop', async ($, on) => {
+test('disegna le due finestre nel piè di pagina del terminale', async ($, on) => {
   await measure($, on)
-  for (const surface of ['terminal', 'desktop'] as const) {
+  {
     const ui = await $.ui.mount({
       plugin: 'usage-meter',
-      surface,
+      surface: 'terminal',
       component: 'SessionMode',
       props: { modes: ['focus'] },
     })
@@ -45,4 +45,21 @@ test('disegna le due finestre nel piè di pagina, su terminale e desktop', async
     expect(await ui.find({ type: 'Text', text: 'focus' })).toBeDefined()
     await ui.unmount()
   }
+})
+
+test('sul desktop lascia il piè di pagina com\'è', async ($, on) => {
+  on('ui.render', ($: any, e: any) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>footer del motore</Text>
+  })
+  await measure($, on)
+  const ui = await $.ui.mount({
+    plugin: 'usage-meter',
+    surface: 'desktop',
+    component: 'SessionMode',
+    props: { modes: ['focus'] },
+  })
+  expect(await ui.find({ type: 'Text', text: 'footer del motore' })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /5h/ })).toBeUndefined()
+  await ui.unmount()
 })
