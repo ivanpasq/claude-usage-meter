@@ -1,11 +1,14 @@
 # usage-meter
 
-Una mod per Claude Code che mostra, sotto il prompt, quanto hai usato della finestra di **5 ore** e di quella **settimanale** del tuo abbonamento Claude, e tra quanto si azzerano.
+Una mod per Claude Code che mostra, nel piè di pagina del prompt, quanto hai usato della finestra di **5 ore** e di quella **settimanale** del tuo abbonamento Claude, e tra quanto si azzerano.
 
 ```
-5h ███░░░░░░░ 27% ↻2h13m  ·  7d ████░░░░░░ 41.5% ↻3g4h
+5h ━━━━━━━━ 49% ↻ 12m   7d ━━━━━━━━ 19% ↻ 4g 9h
 ```
 
+La barra è verde fino al 70%, gialla fino al 90%, rossa oltre. Il tempo al reset si aggiorna ogni minuto.
+
+- Funziona nel terminale e nell'app desktop.
 - Si aggiorna da sola quando una delle due percentuali sale di almeno un punto.
 - I dati arrivano con le risposte del modello: la riga compare dopo il primo messaggio della sessione.
 - Senza un abbonamento Claude (per esempio con una API key) quei dati non ci sono e la riga non appare.

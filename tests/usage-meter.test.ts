@@ -1,33 +1,48 @@
 import { expect, mock, test } from 'claude-code/testing'
-import { format } from '../hooks/register'
+import { split, tone, untilReset } from '../hooks/register'
 
 const NOW = Date.parse('2026-10-19T12:00:00Z')
 
-test('mostra 5h e 7d con barra, percentuale e tempo al reset', async () => {
-  const text = format(
-    [
-      { kind: 'five_hour', percentUsed: 27, resetsAt: '2026-10-19T14:13:00Z' },
-      { kind: 'seven_day', percentUsed: 41.5, resetsAt: '2026-10-22T16:00:00Z' },
-    ],
-    NOW,
-  )
-  expect(text).toBe('5h ███░░░░░░░ 27% ↻2h13m  ·  7d ████░░░░░░ 41.5% ↻3g4h')
+test('tempo al reset leggibile', async () => {
+  expect(untilReset('2026-10-19T12:12:00Z', NOW)).toBe('12m')
+  expect(untilReset('2026-10-19T14:13:00Z', NOW)).toBe('2h 13m')
+  expect(untilReset('2026-10-23T21:00:00Z', NOW)).toBe('4g 9h')
+  expect(untilReset(undefined, NOW)).toBeUndefined()
 })
 
-test('niente da mostrare senza finestre di abbonamento', async () => {
-  expect(format([], NOW)).toBeUndefined()
-  expect(format([{ kind: 'spend_limit', percentUsed: 10 }], NOW)).toBeUndefined()
+test('barra e colore seguono la percentuale', async () => {
+  expect(split(50)).toEqual({ filled: '━━━━', empty: '━━━━' })
+  expect(split(120).empty).toBe('')
+  expect(tone(49)).toBe('success')
+  expect(tone(75)).toBe('warning')
+  expect(tone(95)).toBe('error')
 })
 
-test('session.measure aggiorna la status line', async ($, on) => {
+const measure = async ($: any, on: any) => {
   mock.clock(on, { now: NOW })
-  on('session.measure', ($, e) => ({ changed: e.changed }))
-  const seen: (string | undefined)[] = []
-  on('ui.status', ($, e, next) => (seen.push(e.text), next(e)))
+  on('session.measure', ($: any, e: any) => ({ changed: e.changed }))
   await $.session.measure({
     context: { window: 200_000 } as never,
-    rateLimits: [{ kind: 'five_hour', percentUsed: 90 }],
+    rateLimits: [
+      { kind: 'five_hour', percentUsed: 49, resetsAt: '2026-10-19T12:12:00Z' },
+      { kind: 'seven_day', percentUsed: 19, resetsAt: '2026-10-23T21:00:00Z' },
+    ],
     changed: ['rateLimits'],
   })
-  expect(seen.at(-1)).toBe('5h █████████░ 90%')
+}
+
+test('disegna le due finestre nel piè di pagina, su terminale e desktop', async ($, on) => {
+  await measure($, on)
+  for (const surface of ['terminal', 'desktop'] as const) {
+    const ui = await $.ui.mount({
+      plugin: 'usage-meter',
+      surface,
+      component: 'SessionMode',
+      props: { modes: ['focus'] },
+    })
+    expect(await ui.find({ type: 'Text', text: /5h.*49%.*↻ 12m/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /7d.*19%.*↻ 4g 9h/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: 'focus' })).toBeDefined()
+    await ui.unmount()
+  }
 })
