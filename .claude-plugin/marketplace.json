@@ -1,6 +1,6 @@
 {
   "name": "claude-usage-meter",
-  "description": "Mod per Claude Code: usage 5h e settimanale nella status line",
+  "description": "Claude Code mod: 5-hour and weekly usage in the prompt footer",
   "owner": {
     "name": "ivanpasq"
   },

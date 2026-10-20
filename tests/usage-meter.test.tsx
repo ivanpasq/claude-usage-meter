@@ -3,14 +3,14 @@ import { split, tone, untilReset } from '../hooks/register'
 
 const NOW = Date.parse('2026-10-19T12:00:00Z')
 
-test('tempo al reset leggibile', async () => {
+test('time until reset reads well', async () => {
   expect(untilReset('2026-10-19T12:12:00Z', NOW)).toBe('12m')
   expect(untilReset('2026-10-19T14:13:00Z', NOW)).toBe('2h 13m')
-  expect(untilReset('2026-10-23T21:00:00Z', NOW)).toBe('4g 9h')
+  expect(untilReset('2026-10-23T21:00:00Z', NOW)).toBe('4d 9h')
   expect(untilReset(undefined, NOW)).toBeUndefined()
 })
 
-test('barra e colore seguono la percentuale', async () => {
+test('bar and color follow the percentage', async () => {
   expect(split(50)).toEqual({ filled: '━━━━', empty: '━━━━' })
   expect(split(120).empty).toBe('')
   expect(tone(49)).toBe('success')
@@ -31,7 +31,7 @@ const measure = async ($: any, on: any) => {
   })
 }
 
-test('disegna le due finestre nel piè di pagina del terminale', async ($, on) => {
+test('draws both windows in the terminal footer', async ($, on) => {
   await measure($, on)
   {
     const ui = await $.ui.mount({
@@ -41,16 +41,16 @@ test('disegna le due finestre nel piè di pagina del terminale', async ($, on) =
       props: { modes: ['focus'] },
     })
     expect(await ui.find({ type: 'Text', text: /5h.*49%.*↻ 12m/ })).toBeDefined()
-    expect(await ui.find({ type: 'Text', text: /7d.*19%.*↻ 4g 9h/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /7d.*19%.*↻ 4d 9h/ })).toBeDefined()
     expect(await ui.find({ type: 'Text', text: 'focus' })).toBeDefined()
     await ui.unmount()
   }
 })
 
-test('sul desktop lascia il piè di pagina com\'è', async ($, on) => {
+test('leaves the desktop footer as it is', async ($, on) => {
   on('ui.render', ($: any, e: any) => {
     const { Text } = $.ui.resolve(e)
-    return <Text>footer del motore</Text>
+    return <Text>engine footer</Text>
   })
   await measure($, on)
   const ui = await $.ui.mount({
@@ -59,7 +59,7 @@ test('sul desktop lascia il piè di pagina com\'è', async ($, on) => {
     component: 'SessionMode',
     props: { modes: ['focus'] },
   })
-  expect(await ui.find({ type: 'Text', text: 'footer del motore' })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: 'engine footer' })).toBeDefined()
   expect(await ui.find({ type: 'Text', text: /5h/ })).toBeUndefined()
   await ui.unmount()
 })

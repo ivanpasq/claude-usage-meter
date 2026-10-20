@@ -1,40 +1,46 @@
 # usage-meter
 
-Una mod per Claude Code che mostra, nel piè di pagina del prompt, quanto hai usato della finestra di **5 ore** e di quella **settimanale** del tuo abbonamento Claude, e tra quanto si azzerano.
+A Claude Code mod that shows, in the prompt footer, how much of your Claude subscription's **5-hour** and **weekly** windows you have used, and how long until each one resets.
 
 ```
-5h ━━━━━━━━ 49% ↻ 12m   7d ━━━━━━━━ 19% ↻ 4g 9h
+5h ━━━━━━━━ 49% ↻ 12m   7d ━━━━━━━━ 19% ↻ 4d 9h
 ```
 
-La barra è verde fino al 70%, gialla fino al 90%, rossa oltre. Il tempo al reset si aggiorna ogni minuto.
+The bar is green up to 70%, yellow up to 90%, and red beyond that. The time until reset refreshes every minute.
 
-- Si vede solo nel terminale: l'app desktop mostra già lo usage accanto al selettore del modello.
-- Si aggiorna da sola quando una delle due percentuali sale di almeno un punto.
-- I dati arrivano con le risposte del modello: la riga compare dopo il primo messaggio della sessione.
-- Senza un abbonamento Claude (per esempio con una API key) quei dati non ci sono e la riga non appare.
+- Terminal only: the desktop app already shows usage next to the model picker.
+- Updates by itself whenever either percentage rises by at least one point.
+- The figures arrive with the model's responses, so the line appears after the session's first message.
+- Without a Claude subscription (for example, with an API key) those figures are not available and the line does not appear.
 
-## Installazione
+## Install
 
-Al prompt di una sessione di Claude Code nel terminale:
+At the prompt of a Claude Code session in the terminal:
 
 ```
 /plugin install usage-meter --marketplace ivanpasq/claude-usage-meter
 ```
 
-Da shell:
+From a shell:
 
 ```bash
 claude plugin install usage-meter --marketplace ivanpasq/claude-usage-meter
 ```
 
-Nell'app desktop, dove `/plugin` non è disponibile: clicca **+** accanto al box del prompt, poi **Plugins**, **Add marketplace** con `ivanpasq/claude-usage-meter`, poi **Add plugin**.
+In the desktop app, where `/plugin` is not available: click **+** next to the prompt box, then **Plugins**, **Add marketplace** with `ivanpasq/claude-usage-meter`, then **Add plugin**.
 
-## Disinstallazione
+## Update
+
+```bash
+claude plugin update usage-meter@claude-usage-meter
+```
+
+## Uninstall
 
 ```bash
 claude plugin uninstall usage-meter
 ```
 
-## Licenza
+## License
 
 MIT

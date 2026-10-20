@@ -25,7 +25,7 @@ export const untilReset = (resetsAt: string | undefined, now: number) => {
   const minutes = Math.max(0, Math.round((Date.parse(resetsAt) - now) / MINUTE))
   const days = Math.floor(minutes / 1440)
   const hours = Math.floor((minutes % 1440) / 60)
-  if (days > 0) return `${days}g ${hours}h`
+  if (days > 0) return `${days}d ${hours}h`
   if (hours > 0) return `${hours}h ${minutes % 60}m`
   return `${minutes}m`
 }

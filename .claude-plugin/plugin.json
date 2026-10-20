@@ -1,7 +1,7 @@
 {
   "name": "usage-meter",
-  "version": "0.2.1",
-  "description": "Mostra nel piè di pagina del prompt lo usage della finestra di 5 ore e di quella settimanale",
+  "version": "0.2.2",
+  "description": "Shows your 5-hour and weekly Claude usage in the terminal's prompt footer",
   "author": { "name": "ivanpasq", "url": "https://github.com/ivanpasq" },
   "repository": "https://github.com/ivanpasq/claude-usage-meter",
   "license": "MIT",
